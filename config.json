@@ -1,0 +1,33 @@
+{
+  "telldus": {
+    "publicKey": "your public key",
+    "privateKey": "your private key",
+    "token": "your token",
+    "tokenSecret": "your token secret",
+    "pollInterval": "interval between polls to telldus in msec"
+  },
+  "thingSpeak": {
+    "channelId": {
+      "writeKey": "your write key",
+      "readKey": "your read key"
+    },
+    "channelId2": {
+      "writeKey": "your write key",
+      "readKey": "your read key"
+    }
+  },
+  "mappings": {
+    "sensorId": {
+      "channelId": [
+        {
+          "fieldId": "field id in thingspeak channel",
+          "telldusDataId": "sensor data id in telldus"
+        },
+        {
+          "fieldId": "field id in thingspeak channel",
+          "telldusDataId": "sensor data id in telldus"
+        }
+      ]
+    }
+  }
+}

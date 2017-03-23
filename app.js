@@ -1,6 +1,6 @@
 var TelldusAPI = require('telldus-live');
 // var config = require('./myconfig.json')
-var config = require('./config.json')
+var config = require('./myconfig.json')
 var ThingSpeakClient = require('thingspeakclient');
 var express = require('express');
 var _ = require('lodash');
@@ -19,10 +19,10 @@ var client = new ThingSpeakClient();
 
 
 const setupChannels = () => {
-  const { thingSpeak } = config;
+  const { thingSpeak, channels } = config;
 _.each(Object.keys(thingSpeak), (channelId) => {
   client.attachChannel(parseInt(channelId), { writeKey:thingSpeak[channelId].writeKey, readKey:thingSpeak[channelId].readKey}, (res) => {
-    console.log(`Successfully setup channel ${channelId} in ThingSpeak`);
+    console.log(`Successfully setup channel ${channelId} - ${channels[channelId].name} in ThingSpeak`);
   });
 });
 };
@@ -37,17 +37,20 @@ const buildFields = (fields, sensor) => {
 
 const startPollingSensors = () => {
   console.log('Starting poll of sensors from telldus API');
-  const { mappings } = config;
+  const { mappings, channels } = config;
   cloud.getSensors((err, sensors) => {
     let filteredSensors = _.filter(sensors, (s) => s.name != null);
     filteredSensors.forEach((sensor) => {
       setInterval(() => {
         cloud.getSensorInfo(sensor, function(err, sensor) {
           if (mappings[sensor.id]) {
-            const channelId = Object.keys(mappings[sensor.id]);
-            const fields = buildFields(mappings[sensor.id][channelId], sensor);
-            console.log(`Updating channel ${channelId}`, fields);
-            client.updateChannel(channelId, fields, null);
+            _.each(mappings[sensor.id], (channel) => {
+              const fields = buildFields(channel.fields, sensor);
+              console.log(`Updating channel ${channel.channelId} - ${channels[channel.channelId].name}`, fields);
+              client.updateChannel(channel.channelId, fields, null);
+            });
+
+
           };
         });
       }, config.telldus.pollInterval);

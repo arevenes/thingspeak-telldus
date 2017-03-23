@@ -17,17 +17,53 @@
     }
   },
   "mappings": {
-    "sensorId": {
-      "channelId": [
-        {
-          "fieldId": "field id in thingspeak channel",
-          "telldusDataId": "sensor data id in telldus"
-        },
-        {
-          "fieldId": "field id in thingspeak channel",
-          "telldusDataId": "sensor data id in telldus"
-        }
-      ]
+    "sensorId": [
+      {
+        "channelId": [
+          {
+            "fieldId": "field id in thingspeak channel",
+            "telldusDataId": "sensor data id in telldus"
+          }
+        ],
+        "channelId2": [
+          {
+            "fieldId": "field id in thingspeak channel",
+            "telldusDataId": "sensor data id in telldus"
+          },
+          {
+            "fieldId": "field id in thingspeak channel",
+            "telldusDataId": "sensor data id in telldus"
+          }
+        ]
+      }
+    ],
+    "anotherSensorId": [
+      {
+        "channelId": [
+          {
+            "fieldId": "field id in thingspeak channel",
+            "telldusDataId": "sensor data id in telldus"
+          }
+        ],
+        "channelId2": [
+          {
+            "fieldId": "field id in thingspeak channel",
+            "telldusDataId": "sensor data id in telldus"
+          },
+          {
+            "fieldId": "field id in thingspeak channel",
+            "telldusDataId": "sensor data id in telldus"
+          }
+        ]
+      }
+    ]
+  },
+  "channels": {
+    "channelId": {
+      "name": "your name for the channel in thingspeak"
+    },
+    "anotherChannelId": {
+      "name": "your name for the channel in thingspeak"
     }
   }
 }

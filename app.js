@@ -1,6 +1,6 @@
 var TelldusAPI = require('telldus-live');
 // var config = require('./myconfig.json')
-var config = require('./myconfig.json')
+var config = require('./config.json')
 var ThingSpeakClient = require('thingspeakclient');
 var express = require('express');
 var _ = require('lodash');

@@ -17,7 +17,6 @@ cloud.login(token, tokenSecret, (err, user) => {
 });
 var client = new ThingSpeakClient();
 
-
 const setupChannels = () => {
   const { thingSpeak, channels } = config;
 _.each(Object.keys(thingSpeak), (channelId) => {
@@ -35,29 +34,35 @@ const buildFields = (fields, sensor) => {
   return builtFields;
 };
 
+const updateSensors = (channel, channelUpdates) => {
+  console.log(`Updating channel ${channel} with data: ${JSON.stringify(channelUpdates)}`);
+  client.updateChannel(channel, channelUpdates, null);
+};
+
 const startPollingSensors = () => {
-  console.log('Starting poll of sensors from telldus API');
-  const { mappings, channels } = config;
+  let updates = {};
+  const { mappings, telldus } = config;
+  console.log(`Will poll sensors from telldus API in ${telldus.pollInterval / 1000} seconds`);
   cloud.getSensors((err, sensors) => {
     let filteredSensors = _.filter(sensors, (s) => s.name != null);
-    filteredSensors.forEach((sensor) => {
-      setInterval(() => {
-        cloud.getSensorInfo(sensor, function(err, sensor) {
-          if (mappings[sensor.id]) {
-            _.each(mappings[sensor.id], (channel) => {
-              const fields = buildFields(channel.fields, sensor);
-              console.log(`Updating channel ${channel.channelId} - ${channels[channel.channelId].name}`, fields);
-              client.updateChannel(channel.channelId, fields, null);
-            });
-
-
-          };
-        });
-      }, config.telldus.pollInterval);
+    filteredSensors.map((sensor) => {
+      cloud.getSensorInfo(sensor, function(err, sensor) {
+        if (mappings[sensor.id]) {
+          _.each(mappings[sensor.id], (channel) => {
+            const fields = buildFields(channel.fields, sensor);
+            updates[channel.channelId] = _.assign(updates[channel.channelId], fields);
+          });
+        };
+      });
     });
   });
-}
-
+  setTimeout(() => {
+    _.map(updates, (channelUpdates, idx) => {
+      updateSensors(idx, channelUpdates)
+    });
+    startPollingSensors();
+  }, config.telldus.pollInterval);
+};
 
 var app = express();
 

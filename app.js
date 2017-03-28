@@ -47,7 +47,7 @@ const startPollingSensors = () => {
     let filteredSensors = _.filter(sensors, (s) => s.name != null);
     filteredSensors.map((sensor) => {
       cloud.getSensorInfo(sensor, function(err, sensor) {
-        if (mappings[sensor.id]) {
+        if (sensor && mappings[sensor.id]) {
           _.each(mappings[sensor.id], (channel) => {
             const fields = buildFields(channel.fields, sensor);
             updates[channel.channelId] = _.assign(updates[channel.channelId], fields);

@@ -58,10 +58,10 @@ const startPollingSensors = () => {
   setTimeout(() => {
     _.map(updates, (channelUpdates, idx) => {
       updateSensors(idx, channelUpdates)
+      console.log(`Will poll sensors from telldus API in ${telldus.pollInterval / 1000} seconds`);
     });
   }, 10000);
   setTimeout(() => {
-    console.log(`Will poll sensors from telldus API in ${telldus.pollInterval / 1000} seconds`);
     startPollingSensors();
   }, config.telldus.pollInterval);
 };

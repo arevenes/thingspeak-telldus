@@ -42,7 +42,6 @@ const updateSensors = (channel, channelUpdates) => {
 const startPollingSensors = () => {
   let updates = {};
   const { mappings, telldus } = config;
-  console.log(`Will poll sensors from telldus API in ${telldus.pollInterval / 1000} seconds`);
   cloud.getSensors((err, sensors) => {
     let filteredSensors = _.filter(sensors, (s) => s.name != null);
     filteredSensors.map((sensor) => {
@@ -60,6 +59,9 @@ const startPollingSensors = () => {
     _.map(updates, (channelUpdates, idx) => {
       updateSensors(idx, channelUpdates)
     });
+  }, 10000);
+  setTimeout(() => {
+    console.log(`Will poll sensors from telldus API in ${telldus.pollInterval / 1000} seconds`);
     startPollingSensors();
   }, config.telldus.pollInterval);
 };

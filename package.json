@@ -4,7 +4,7 @@
   "description": "",
   "main": "login.js",
   "dependencies": {
-    "telldus-live": "^0.2.1"
+    "telldus-live": "git+https://github.com/arevenes/node-telldus-live.git"
   },
   "devDependencies": {
     "express": "^4.15.2",
